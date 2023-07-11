@@ -1,12 +1,17 @@
 package com.example.login.Auth;
 
 import com.example.login.User;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Getter
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

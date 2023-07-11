@@ -38,10 +38,12 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, Collection<Role> roles, boolean isEnabled) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.roles = roles;
+        this.isEnabled = isEnabled;
     }
 
     public void setEnabled(boolean enabled) {
