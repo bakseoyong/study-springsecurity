@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up Form</title>
+</head>
+<body>
+<form>
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" required>
+
+    <button type="button" id="check-id-btn">Check ID</button>
+    <span id="idDuplicationMessage" style="color:red;"></span>
+
+    <br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <br>
+
+    <label for="password-confirm">Confirm Password:</label>
+    <input type="password" id="password-confirm" name="password-confirm" required>
+    <span id="passwordMatchMessage" style="color:red;"></span>
+
+    <br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <button type="button" id="send-email-verification-btn">Send Email Verification</button>
+
+    <br>
+
+    <label for="email-verification-code">Email Verification Code:</label>
+    <input type="text" id="email-verification-code" name="email-verification-code" required>
+
+    <br>
+
+    <button type="submit" id="signup-btn">Sign Up</button>
+</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function checkPasswordMatch() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("password-confirm").value;
+
+        if (password != confirmPassword) {
+            document.getElementById("passwordMatchMessage").innerHTML = "비밀번호가 일치하지 않습니다.";
+        } else {
+            document.getElementById("passwordMatchMessage").innerHTML = "";
+        }
+    }
+
+    document.getElementById("password").addEventListener("keyup", checkPasswordMatch);
+    document.getElementById("password-confirm").addEventListener("keyup", checkPasswordMatch);
+
+    $(document).ready(function () {
+        $("#check-id-btn").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/signup/valid/id-duplication",
+                data: {id: $("#id").val()},
+                success: function (response) {
+                    if (response === "true") {
+                        $("#idDuplicationMessage").html("사용 가능한 아이디입니다.");
+                    } else {
+                        $("#idDuplicationMessage").html("이미 사용중인 아이디입니다.");
+                    }
+                },
+                error: function () {
+                    alert("서버와의 통신에 실패했습니다.");
+                }
+            });
+        });
+    });
+</script>
+</html>
