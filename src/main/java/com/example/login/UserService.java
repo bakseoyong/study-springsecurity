@@ -44,17 +44,17 @@ public class UserService {
 
         if(!user.isPresent()){
             return AuthUserDto.builder()
-                    .isSuccess(false)
+                    .id(null)
                     .message("유저가 존재하지 않습니다.").build();
         }else{
             if(!user.get().getPassword().equals(password)){
                 return AuthUserDto.builder()
-                    .isSuccess(false)
+                    .id(null)
                     .message("비밀번호가 일치하지 않습니다.").build();
             }
         }
         return AuthUserDto.builder()
-                .isSuccess(true)
+                .id(user.get().getId())
                 .message("로그인에 성공했습니다.").build();
     }
 

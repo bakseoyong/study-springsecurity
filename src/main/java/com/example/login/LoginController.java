@@ -1,8 +1,10 @@
 package com.example.login;
 
+import com.example.login.Dto.AuthUserDto;
 import com.example.login.VO.LoginForm;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -31,10 +33,18 @@ public class LoginController {
     }
 
     @PostMapping("/api/v1/login")
-    public String login(@RequestBody LoginForm loginForm){
+    public ResponseEntity<AuthUserDto> login(@RequestBody LoginForm loginForm){
         String username = loginForm.getUsername();
         String password = loginForm.getPassword();
 
-        loginService.sendAuthenticationRequest(username, password);
+        AuthUserDto authUserDto = loginService.sendAuthenticationRequest(username, password);
+        if(authUserDto.getId() == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(authUserDto);
+        }
+        return ResponseEntity
+                .ok()
+                .body(authUserDto);
     }
 }

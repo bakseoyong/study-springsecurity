@@ -32,9 +32,15 @@ public class UserController {
 
     @PostMapping("/api/v1/users/auth")
     public ResponseEntity<AuthUserDto> authUser(@RequestBody UserAuthRequest request){
-        AuthUserDto userDto = userService.authUser(request.getId(), request.getPassword());
+        AuthUserDto authUserDto = userService.authUser(request.getId(), request.getPassword());
 
-        if(!userDto.isSuccess())
-            return ResponseEntity.notFound().
+        if(authUserDto.getId() == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(authUserDto);
+        }
+        return ResponseEntity
+                .ok()
+                .body(authUserDto);
     }
 }
