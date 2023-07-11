@@ -1,4 +1,4 @@
-package com.example.login.SecurityHandler;
+package com.example.login.Auth.SecurityHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

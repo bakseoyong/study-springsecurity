@@ -1,4 +1,4 @@
-package com.example.login.SecurityHandler;
+package com.example.login.Auth.SecurityHandler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
