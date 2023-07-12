@@ -48,9 +48,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
 
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-        User user = new User("test", passwordEncoder.encode("test"), "test@test.com");
-        user.setRoles(Arrays.asList(adminRole));
-        user.setEnabled(true);
+        User user = new User("test", passwordEncoder.encode("test"), "test@test.com",
+                Arrays.asList(adminRole), false);
         userRepository.save(user);
 
         alreadySetup = true;

@@ -1,5 +1,6 @@
 package com.example.login;
 
+import com.example.login.Auth.RoleContextHolder;
 import com.example.login.Dto.AuthUserDto;
 import com.example.login.Dto.UserDto;
 import com.example.login.Exception.SignUpFormNotUniqueException;
@@ -8,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -17,6 +20,11 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger("UserService");
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
 
     public boolean checkUsernameDuplication(String username){
         return !userRepository.findByUsername(username).isPresent();
@@ -27,7 +35,8 @@ public class UserService {
     }
 
     public UserDto createUser(SignUpForm form){
-        User user = new User(form.getUsername(), form.getPassword(), form.getEmail());
+        User user = new User(form.getUsername(), passwordEncoder.encode(form.getPassword()), form.getEmail(),
+                Arrays.asList(RoleContextHolder.getRole()), true);
 
         try{
             userRepository.save(user);
@@ -36,7 +45,7 @@ public class UserService {
             throw new SignUpFormNotUniqueException("아이디 혹은 이메일이 중복됩니다.");
         }
 
-        return new UserDto(user.getId(), user.getUsername(), user.getPassword(), user.getEmail());
+        return new UserDto(user.getId(), user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getEmail());
     }
 
     public AuthUserDto authUser(String username, String password){
