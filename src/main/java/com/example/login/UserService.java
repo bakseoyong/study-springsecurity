@@ -1,6 +1,6 @@
 package com.example.login;
 
-import com.example.login.Auth.RoleContextHolder;
+import com.example.login.Auth.RoleService;
 import com.example.login.Dto.AuthUserDto;
 import com.example.login.Dto.UserDto;
 import com.example.login.Exception.SignUpFormNotUniqueException;
@@ -22,6 +22,9 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
@@ -36,7 +39,7 @@ public class UserService {
 
     public UserDto createUser(SignUpForm form){
         User user = new User(form.getUsername(), passwordEncoder.encode(form.getPassword()), form.getEmail(),
-                Arrays.asList(RoleContextHolder.getRole()), true);
+                Arrays.asList(roleService.getUserRole()), true);
 
         try{
             userRepository.save(user);

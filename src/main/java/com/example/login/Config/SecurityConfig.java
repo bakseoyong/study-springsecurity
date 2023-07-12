@@ -29,8 +29,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
+                .headers()
+                    .frameOptions()
+                    .sameOrigin();
+
+        http
+                .csrf()
+                    .ignoringAntMatchers("/h2-console/**")
+                    .disable()
                 .authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()
                 .expressionHandler(defaultWebSecurityExpressionHandler())
 
                 .anyRequest().authenticated();
